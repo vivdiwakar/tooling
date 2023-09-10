@@ -82,16 +82,27 @@ echo "Aliases setup complete."
 echo "Setting up PATH ..."
 if [[ -z $(grep "export PATH=" ${SHELL_CONF}) ]]
 then
-        echo "Adding PATH ..."
+    echo "Adding PATH ..."
 	echo "export PATH=${PATH}:${SYMLINK}/bin" >> ${SHELL_CONF}
 	echo "done."
 else
-	if [[ -z $(grep "export PATH=" ${SHELL_CONF} | grep "${SYMLINK}/bin") ]]
+	if [[ -z $(grep "export PATH=" ${SHELL_CONF} | grep "elixir") ]]
 	then
-		echo "path exists but elixir not set"
-		sed -i -e "/^export PATH=/ {s|$|:${SYMLINK}/bin|g}" ${SHELL_CONF}
+		echo "path exists but Elixir not set"
+		sed -i.bak.0 -e "/^export PATH=/ {s|$|:${SYMLINK}/bin|g}" ${SHELL_CONF}
+	else
+		echo "path exists and Elixir set, checking PATH"
+		if [[ -z $(grep "export PATH=" ${SHELL_CONF} | grep "${SYMLINK}/bin") ]]
+		then
+			sed -i.bak.1 -r 's|(.*)[=:].*elixir/bin|\1|g' ${SHELL_CONF}
+			sed -i.bak.2 -e "/^export PATH=/ {s|$|:${SYMLINK}/bin|g}" ${SHELL_CONF}
+		else
+			echo "PATH set correctly"
+		fi
 	fi
 fi
+echo "Cleaning up ..."
+	rm -f ${SHELL_CONF}.bak.*
 echo "PATH setup complete."
 
 echo "Re-source ${SHELL_CONF} to load aliases and updated PATH to start using Elixir."
