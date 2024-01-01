@@ -7,17 +7,6 @@ function print_error_and_exit {
 	echo -e ${message} && exit ${ret_code}
 }
 
-# Check arguments
-function get_tag_argument {
-	local arg=${1}
-	if [[ "x${arg}" == "x" ]]
-	then
-		print_error_and_exit "Usage: sudo ${0} x.yy.zz" 2
-	fi
-
-	echo -n "${arg}"
-}
-
 # Check if Erlang is installed and return the OTP version
 function get_otp_version {
 	local file_suffix="lib/erlang/releases/RELEASES"
@@ -48,8 +37,13 @@ TARGET="${DEST_DIR}/elixir-`cat VERSION`-otp`get_otp_version`"
 SYMLINK="${DEST_DIR}/elixir"
 SHELL_CONF="/home/${SUDO_USER}/.bashrc"
 ASYNC_THRDS=$((`cat /proc/cpuinfo | grep \^processor | wc -l`*10))
-TAG_VERSION=$(get_tag_argument ${1}) ; shift
 JOBS=$((`nproc` * 2))
+if [[ -z ${1} ]]
+then
+	print_error_and_exit "Usage: sudo ${0} x.yy.zz" 2
+else
+	TAG_VERSION="${1}"
+fi
 
 # Sanitize
 echo "Running pre-install checks and cleaning up ..."
@@ -71,6 +65,7 @@ else
 fi
 
 echo "Building (using ${JOBS} jobs) ..."
+sudo -u ${SUDO_USER} make -j ${JOBS} clean
 sudo -u ${SUDO_USER} make -j ${JOBS}
 echo "Build complete."
 
