@@ -4,7 +4,7 @@
 function print_error_and_exit {
 	local message="${1}"
 	local ret_code=${2}
-	echo ${message} && exit ${ret_code}
+	echo -e ${message} && exit ${ret_code}
 }
 
 # Check if Erlang is installed and return the OTP version
@@ -18,7 +18,7 @@ function get_otp_version {
 	then
 		rel_file="/usr/${file_suffix}"
 	else
-		print_error_and_exit "RELEASE file not found" 2
+		print_error_and_exit "RELEASE file not found" 3
 	fi
 
 	cat ${rel_file} |\
@@ -37,6 +37,13 @@ TARGET="${DEST_DIR}/elixir-`cat VERSION`-otp`get_otp_version`"
 SYMLINK="${DEST_DIR}/elixir"
 SHELL_CONF="/home/${SUDO_USER}/.bashrc"
 ASYNC_THRDS=$((`cat /proc/cpuinfo | grep \^processor | wc -l`*10))
+JOBS=$((`nproc` * 2))
+if [[ -z ${1} ]]
+then
+	print_error_and_exit "Usage: sudo ${0} x.yy.zz" 2
+else
+	TAG_VERSION="${1}"
+fi
 
 # Sanitize
 echo "Running pre-install checks and cleaning up ..."
@@ -45,6 +52,22 @@ echo "Running pre-install checks and cleaning up ..."
 	echo "Removed link to Elixir deployment" || \
 	echo "Elixir deployment not found"
 echo "Pre-install checks complete."
+
+# Build
+git branch | grep ${TAG_VERSION} 2>&1 > /dev/null
+if [[ ${?} -eq 0 ]]
+then
+	echo "Branch v${TAG_VERSION} found; switching ..."
+	sudo -u ${SUDO_USER} git checkout v${TAG_VERSION}
+else
+	echo "Branch v${TAG_VERSION} not found; creating and checking out ..."
+	sudo -u ${SUDO_USER} git checkout tags/v${TAG_VERSION} -b v${TAG_VERSION}
+fi
+
+echo "Building (using ${JOBS} jobs) ..."
+sudo -u ${SUDO_USER} make -j ${JOBS} clean
+sudo -u ${SUDO_USER} make -j ${JOBS}
+echo "Build complete."
 
 # Install
 echo "Installing Elixir `cat VERSION` ..."
