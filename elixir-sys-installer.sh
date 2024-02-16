@@ -33,7 +33,6 @@ function get_otp_version {
 
 # Set variables
 DEST_DIR="/usr/local/lib"
-TARGET="${DEST_DIR}/elixir-`cat VERSION`-otp`get_otp_version`"
 SYMLINK="${DEST_DIR}/elixir"
 SHELL_CONF="/home/${SUDO_USER}/.bashrc"
 ASYNC_THRDS=$((`cat /proc/cpuinfo | grep \^processor | wc -l`*10))
@@ -43,6 +42,7 @@ then
 	print_error_and_exit "Usage: sudo ${0} x.yy.zz" 2
 else
 	TAG_VERSION="${1}"
+	TARGET="${DEST_DIR}/elixir-${TAG_VERSION}-otp`get_otp_version`"
 fi
 
 # Sanitize
