@@ -95,6 +95,7 @@ echo "Setting up Aliases ..."
 if [[ -z $(grep "alias erl=" ${SHELL_CONF}) ]]
 then 
 	echo "Adding Aliases ..."
+	echo "# Added `date +%Y-%m-%d\ @\ %H:%M:%S\ %Z\ %z` by Elixir configurator" >> ${SHELL_CONF}
 	echo "export ERL_AFLAGS=\"-kernel shell_history enabled\"" >> ${SHELL_CONF}
 	echo "alias erl='erl \"+A ${ASYNC_THRDS}\"'" >> ${SHELL_CONF} 
 	echo "alias iex='iex --erl \"+A ${ASYNC_THRDS}\"'" >> ${SHELL_CONF} 
@@ -106,7 +107,7 @@ echo "Setting up PATH ..."
 if [[ -z $(grep "export PATH=" ${SHELL_CONF}) ]]
 then
     echo "Adding PATH ..."
-	echo "export PATH=${PATH}:${SYMLINK}/bin" >> ${SHELL_CONF}
+	echo -e "export PATH=\${PATH}:${SYMLINK}/bin\n# End config\n" >> ${SHELL_CONF}
 	echo "done."
 else
 	if [[ -z $(grep "export PATH=" ${SHELL_CONF} | grep "elixir") ]]
