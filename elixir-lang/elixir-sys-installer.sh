@@ -95,7 +95,7 @@ echo "Setting up Aliases ..."
 if [[ -z $(grep "alias erl=" ${SHELL_CONF}) ]]
 then 
 	echo "Adding Aliases ..."
-	echo "# Added `date +%Y-%m-%d\ @\ %H:%M:%S\ %Z\ %z` by Elixir configurator" >> ${SHELL_CONF}
+	echo -e "\n# Added `date +%Y-%m-%d\ @\ %H:%M:%S\ %Z\ %z` by Elixir configurator" >> ${SHELL_CONF}
 	echo "export ERL_AFLAGS=\"-kernel shell_history enabled\"" >> ${SHELL_CONF}
 	echo "alias erl='erl \"+A ${ASYNC_THRDS}\"'" >> ${SHELL_CONF} 
 	echo "alias iex='iex --erl \"+A ${ASYNC_THRDS}\"'" >> ${SHELL_CONF} 
