@@ -20,6 +20,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-cp "$@" "$DESTINATION/"
+cp -rfLap "$@" "${DESTINATION}/"
 
 exit 0
