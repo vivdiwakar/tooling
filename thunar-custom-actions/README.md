@@ -15,10 +15,8 @@ Copy all `.sh` files to `${HOME}/.local/bin`.
 
 ```sh
 $ thunar-custom-actions$ cp -v *.sh ${HOME}/.local/bin/
-'copy_to_action.sh' -> '/home/vivd/.local/bin/copy_to_action.sh'
-'move_to_action.sh' -> '/home/vivd/.local/bin/move_to_action.sh'
-'open_terminal_action.sh' -> '/home/vivd/.local/bin/open_terminal_action.sh'
+'convert_to_jpeg.sh' -> '/home/vivd/.local/bin/convery_to_jpeg.sh'
+...
 ```
 
 Then in **Thunar**: *Edit* -> *Configure custom actions...* -> Click on the `+` sign, and follow the instructions in the comments at the top of each `*_action.sh` file.
-
