@@ -20,6 +20,6 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-mv "$@" "$DESTINATION/"
+mv "$@" "${DESTINATION}/"
 
 exit 0
