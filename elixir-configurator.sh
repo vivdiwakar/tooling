@@ -2,7 +2,7 @@
 
 
 SHELL_CONF="${HOME}/.bash_profile"
-ASYNC_THRDS=$((`sysctl -a | grep machdep.cpu.core_count | cut -d ':' -f2 | tr -d ' '`*10))
+ASYNC_THRDS=$((`sysctl -a | grep machdep.cpu.core_count | cut -d ':' -f2 | tr -d ' '`*20))
 
 
 # Install
