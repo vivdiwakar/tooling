@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+
+set -euo pipefail
+
+
+# heic2jpg.sh — convert .heic files to .jpg
+# Usage:
+#   ./heic2jpg.sh              # converts all .heic in current dir
+#   ./heic2jpg.sh /path/to/dir # converts all .heic in target dir
+#   ./heic2jpg.sh file.heic    # converts a single file
+
+
+QUALITY=90  # jpg quality percent
+
+
+convert_one() {
+  local src="$1"
+  local dst="${src%.*}.jpg"
+  if [[ -e "$dst" ]]; then
+    echo "skip (exists): $dst"
+    return
+  fi
+  sips -s format jpeg -s formatOptions "$QUALITY" "$src" --out "$dst" >/dev/null
+  echo "converted: $src -> $dst"
+}
+
+
+target="${1:-.}"
+
+
+if [[ -f "$target" ]]; then
+  convert_one "$target"
+elif [[ -d "$target" ]]; then
+  found=0
+  while IFS= read -r -d '' f; do
+    found=1
+    convert_one "$f"
+  done < <(find "$target" -maxdepth 1 -type f \( -iname '*.heic' -o -iname '*.heif' \) -print0)
+  [[ $found -eq 0 ]] && echo "no .heic files found in `pwd $target`"
+else
+  echo "error: $target is not a file or directory" >&2
+  exit 1
+fi
+
