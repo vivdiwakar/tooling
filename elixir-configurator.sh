@@ -28,10 +28,8 @@ then
 	echo -e "# End Elixir configurator" >> ${SHELL_CONF}
 	echo "done."
 fi
-echo "Aliases setup complete."
-
-
 echo -e "\nRe-source ${SHELL_CONF} to load aliases and updated PATH to start using Elixir."
+echo "\nAliases setup complete."
 
 
 exit 0

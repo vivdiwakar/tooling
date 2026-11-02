@@ -1,5 +1,5 @@
 # Tooling
 
-Linux OS and Dev helper tooling
+MacOS and Dev helper tooling
 
-*Last updated: Tue Nov 25 01:07:00 PM CST 2025*
+*Last updated: Tue Nov 02 2026 10:36:00 UTC-6*
